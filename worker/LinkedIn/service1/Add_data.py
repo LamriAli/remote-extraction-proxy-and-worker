@@ -34,7 +34,7 @@ def Add_Posts_nodes(Graphe,context_obj,schema,list_url,page):
       
                 data[sc]=posts_data[sc][i]
                 
-            if indice > limit_posts:
+            if indice > int(limit_posts):
                context_obj.graph=Graphe
                break
                
@@ -82,7 +82,9 @@ def Add_comment_user(linkedin,Graphe,context,username , password ,list_url,limit
             continue
         
          
-         
+        print("alalalalalalalalalalalla")
+        print(comments)
+        print(len(comments['body']))
         for i in range(0,len(comments['body'])):
             if i%2==1:
                 print("i%2==1")
@@ -96,6 +98,7 @@ def Add_comment_user(linkedin,Graphe,context,username , password ,list_url,limit
             data_user_com=get_user_comment_data(linkedin,user_com,schema)
             
             Graphe.add_nodes_from([(url+str(i),data_com)])
+            print(user_com['User Link'])
 
             if user_com['User Link'] not in Graphe:
 

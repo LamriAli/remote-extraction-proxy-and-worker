@@ -1,0 +1,95 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "id": "100010196080419",
+      "checked": 1,
+      "Name": "Ali Ali",
+      "Friend_count": "196",
+      "Follower_count": "None",
+      "type": "user"
+    },
+    {
+      "checked": 1,
+      "type": "user",
+      "id": "anes.mansouri.20",
+      "Name": "Anas Anas",
+      "Friend_count": "293",
+      "Follower_count": "None"
+    },
+    {
+      "checked": 0,
+      "type": "user",
+      "id": "ilyes.chemlal.7",
+      "Name": "Ilyes Chemlal",
+      "Friend_count": "34",
+      "Follower_count": "None"
+    },
+    {
+      "checked": 0,
+      "type": "user",
+      "id": "islemouabid56",
+      "Name": "Islem Ouabid",
+      "Friend_count": "329",
+      "Follower_count": "None"
+    },
+    {
+      "checked": 0,
+      "type": "user",
+      "id": "aymen.yahia.1044",
+      "Name": "Aymen Yahia",
+      "Friend_count": "1",
+      "Follower_count": "None"
+    },
+    {
+      "checked": 0,
+      "type": "user",
+      "id": "hicham.ghettout.7",
+      "Name": "Hicham Ghtt",
+      "Friend_count": "1",
+      "Follower_count": "None"
+    },
+    {
+      "checked": 0,
+      "type": "user",
+      "id": "100027523729807",
+      "Name": "\u00c1\u00ff M\u0119n",
+      "Friend_count": "1",
+      "Follower_count": "None"
+    }
+  ],
+  "links": [
+    {
+      "link_type": "friend",
+      "source": "100010196080419",
+      "target": "anes.mansouri.20"
+    },
+    {
+      "link_type": "friend",
+      "source": "100010196080419",
+      "target": "ilyes.chemlal.7"
+    },
+    {
+      "link_type": "friend",
+      "source": "100010196080419",
+      "target": "islemouabid56"
+    },
+    {
+      "link_type": "friend",
+      "source": "anes.mansouri.20",
+      "target": "aymen.yahia.1044"
+    },
+    {
+      "link_type": "friend",
+      "source": "anes.mansouri.20",
+      "target": "hicham.ghettout.7"
+    },
+    {
+      "link_type": "friend",
+      "source": "anes.mansouri.20",
+      "target": "100027523729807"
+    }
+  ]
+}

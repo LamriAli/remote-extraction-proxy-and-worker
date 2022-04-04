@@ -217,7 +217,7 @@ def get_post_url(username,password,limit_posts,page):
         lst=[]
         i=0
         for bt in bottons:
-            if i > limit_posts:
+            if i > int(limit_posts):
                 return list_url
             
             print("parser bottons")
@@ -269,7 +269,7 @@ def get_comment_data(comment):
 def get_user_comment_data(linkedin,comment,schema):
     print("get_user_comment_data")
     try:
-        user_info=linkedin.get_profile(profile_link='https://www.linkedin.com'+comment ['User Link'])
+        user_info=linkedin.get_profile(profile_link='/'+comment ['User Link'])
         time.sleep(3)
 
         data={}

@@ -45,7 +45,7 @@ def Add_friends(Graphe ,list_friends,limit_friend,Schema,v,cookies):
      
      for friend in list_friends:
          try:
-             if i<limit_friend:
+             if i<int(limit_friend):
                     
                 #print(friend)
                 if str( friend) not in Graphe:

@@ -89,7 +89,7 @@ def get_friends_user(email,password,account,nb_friends):
                  
                  
                 try:
-                    if len(list_friends)<= nb_friends:
+                    if len(list_friends)<= int(nb_friends):
                             
                         
                         if get_id(user.get_attribute("href")) not in list_friends:
@@ -107,7 +107,7 @@ def get_friends_user(email,password,account,nb_friends):
                     
                     print(ex)
                 
-            if len(list_friends)< nb_friends:
+            if len(list_friends)< int(nb_friends):
                 print("end add user list")
                 return list_friends
                 driver1.close()

@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='utf-8'?>
+<gexf xmlns="http://www.gexf.net/1.2draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2">
+  <meta lastmodifieddate="2022-04-04">
+    <creator>NetworkX 2.7</creator>
+  </meta>
+  <graph defaultedgetype="directed" mode="static" name="">
+    <attributes mode="static" class="edge">
+      <attribute id="5" title="link_type" type="string" />
+    </attributes>
+    <attributes mode="static" class="node">
+      <attribute id="0" title="checked" type="long" />
+      <attribute id="1" title="Name" type="string" />
+      <attribute id="2" title="Friend_count" type="string" />
+      <attribute id="3" title="Follower_count" type="string" />
+      <attribute id="4" title="type" type="string" />
+    </attributes>
+    <nodes>
+      <node id="100009975842374" label="100010196080419">
+        <attvalues>
+          <attvalue for="0" value="1" />
+          <attvalue for="1" value="Ali Ali" />
+          <attvalue for="2" value="196" />
+          <attvalue for="3" value="None" />
+          <attvalue for="4" value="user" />
+        </attvalues>
+      </node>
+      <node id="100004999268094" label="anes.mansouri.20">
+        <attvalues>
+          <attvalue for="0" value="0" />
+          <attvalue for="4" value="user" />
+          <attvalue for="1" value="Anas Anas" />
+          <attvalue for="2" value="293" />
+          <attvalue for="3" value="None" />
+        </attvalues>
+      </node>
+      <node id="100030969174036" label="ilyes.chemlal.7">
+        <attvalues>
+          <attvalue for="0" value="0" />
+          <attvalue for="4" value="user" />
+          <attvalue for="1" value="Ilyes Chemlal" />
+          <attvalue for="2" value="34" />
+          <attvalue for="3" value="None" />
+        </attvalues>
+      </node>
+      <node id="100004876843565" label="islemouabid56">
+        <attvalues>
+          <attvalue for="0" value="0" />
+          <attvalue for="4" value="user" />
+          <attvalue for="1" value="Islem Ouabid" />
+          <attvalue for="2" value="329" />
+          <attvalue for="3" value="None" />
+        </attvalues>
+      </node>
+    </nodes>
+    <edges>
+      <edge source="100009975842374" target="100004999268094" id="0">
+        <attvalues>
+          <attvalue for="5" value="friend" />
+        </attvalues>
+      </edge>
+      <edge source="100009975842374" target="100030969174036" id="1">
+        <attvalues>
+          <attvalue for="5" value="friend" />
+        </attvalues>
+      </edge>
+      <edge source="100009975842374" target="100004876843565" id="2">
+        <attvalues>
+          <attvalue for="5" value="friend" />
+        </attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>

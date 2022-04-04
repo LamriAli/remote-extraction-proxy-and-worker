@@ -18,30 +18,44 @@ from get_data import get_post_url
 from Add_data import Add_comment_user,Add_Posts_nodes
 import json
 from networkx.readwrite import json_graph
-from API_ExtractionService.Network_Extractor import Network_Extractor
+#from API_ExtractionService.Network_Extractor import Network_Extractor
+from Zos_context import Zos_Context
 
 
 
-class Extractor(NetworkExtractor):
-    linkedin=None
-    Graphe=None
+class Extractor():#NetworkExtractor
+   
     
     context=None
     Schema=[]
     context= None
     graphe=NULL
+    linkedin=NULL
 
    
 
-    def __init__(self,linkedin,context,Schema,publisher,roadmap,Graphe):
+    def __init__(self,Schema):#,context,Schema,publisher,roadmap,Graphe
         print("Extractors")
-        self.super().__init__("LinkedIn",context,Schema,publisher,roadmap)
-        self.linkedin=linkedin
-        self.Graphe=Graphe
+        ### ZOS CONTEXT
+        zos_context=Zos_Context()
 
-        self.context=context
-        self.Schema=Schema
-        self.context=context
+        keys={'username':zos_context.get("LI_USERNAME"),'password':zos_context.get("LI_PASSWORD")}
+       
+        #self.super().__init__("LinkedIn",context,Schema,publisher,roadmap)
+        self.context=Context(zos_context.get("LI_ACCOUNT"),keys,zos_context.get("LIMIT_POSTS"),zos_context.get("LIMIT_FRIENDS"),zos_context.get("LIMIT_COMMENTS"),zos_context.get("USER_COMMENT"),zos_context.get("ADD_USER"),zos_context.get("ADD_COM"),zos_context.get("POST"))
+
+         
+        self.graphe=nx.DiGraph()
+
+        ####Linkedin instance
+                
+        self.linkedin=bot_studio.linkedin()    
+        self.linkedin.login(zos_context.get("LI_USERNAME") ,zos_context.get("LI_PASSWORD") )
+        self.create_graphe(Schema)
+
+
+
+        
     def get_graph(self):
         return self.graphe
     
@@ -97,9 +111,10 @@ class Extractor(NetworkExtractor):
  
 
 
-    @NetworkExtractor.data_publisher
-    def create_graphe(self,linkedin,Graphe,file_graphe,context,Schema):
+    #@NetworkExtractor.data_publisher
+    def create_graphe(self,Schema):
         print("-----create graphe--------")
+        context=self.context
         username=context.keys['username']
        
         password=context.keys['password']
@@ -107,6 +122,7 @@ class Extractor(NetworkExtractor):
         page=context.account
         
         limit_comment= context.limit_comments
+        Graphe=self.graphe
         if Graphe.number_of_nodes() ==0:
         
         
@@ -148,16 +164,17 @@ class Extractor(NetworkExtractor):
                             print("no url selected")
                             break
                          
-                        Add_Posts_nodes(Graphe,file_graphe,context,Schema,list_url,v)
-                         
+                        Add_Posts_nodes(Graphe,context,Schema,list_url,v)
+                          
                         
                         #Add Comment
                         user_comment=context.user_comment
-                        if(user_comment==True):
+
+                        if(user_comment=='True'):
                             add_comm=context.add_comm
                             add_user=context.add_user
                             
-                            Add_comment_user(linkedin,Graphe,context,file_graphe,username , password ,list_url,limit_comment,Schema,add_user,add_comm)
+                            Add_comment_user(self.linkedin,Graphe,context,username , password ,list_url,limit_comment,Schema,add_user,add_comm)
 
                             
                         
@@ -174,8 +191,8 @@ class Extractor(NetworkExtractor):
            # self.graphe=Graphe
             self.set_graph(context.graph)
             final_graph=self.get_graph()
-            self.save_json(file_graphe+".json",final_graph)
-            loaded_json = json.loads(file_graphe+".json")
+            self.save_json("file_graphe.json",final_graph)
+            loaded_json = json.loads("file_graphe.json")
             #dateien = json_graph(Graphe)
             print("dateeien")
             print(loaded_json)
@@ -184,6 +201,6 @@ class Extractor(NetworkExtractor):
             # delivering payload
             # locator.getPublisher().publish("Twitter",json.dumps(payload))
         except Exception as ex:
-            self.save_json(file_graphe+".json",context.graph)
+            self.save_json("file_graphe.json",context.graph)
             print(ex)       
 

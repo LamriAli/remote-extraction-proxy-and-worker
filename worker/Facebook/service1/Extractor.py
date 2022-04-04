@@ -1,61 +1,82 @@
 
+# COPYRIGHT 2022 LAMRI Ali, ZAIDI Omar
+
 from asyncio.windows_events import NULL
-from API_ExtractionService.Network_Extractor import Network_Extractor
+#from API_ExtractionService.Network_Extractor import Network_Extractor, NetworkExtractor
 import json
-from click import option
 from facebook_scraper import get_posts,get_friends,get_profile
 from facebook_scraper import get_group_info
 import pandas as pd
 from context  import Context
+from Zos_context import Zos_Context
 import time
 import os
-import networkx as nx 
+import networkx as nx
 from Add_data import Add_friends,Add_posts 
 from get_data import get_driver,get_friends_user,get_id,get_user_name_password
 from networkx.readwrite import json_graph
 
-
-class Extractor(NetworkExtractor):
- 
- 
+class Extractor():
+    #NetworkExtractor
+    
     context=None
     Schema=[]
     graphe=NULL
-    def __init__(self,context,Schema,publisher,roadmap):
-        print("Extractors")
-        self.super().__init__("Facebook",context,Schema,publisher,roadmap)
+    cookies=''
+    def __init__(self, Schema):#,publisher,roadmap
+        # print("Extractors")
+        zos_context=Zos_Context()
         
-        self.context=context
+        Schema={'user':['id','Name','Friend_count','Follower_count','About'],'post':['post_id','post_text','comments','user_id','reaction_count','page_id','fetched_time']}
+        account=zos_context.get("FB_ACCOUNT")
+        self.cookies= zos_context.get("FB_COOKIE")
+        creds={'email':zos_context.get("FB_EMAIL"),'password': zos_context.get("FB_PASSWORD")}
+        post=zos_context.get("POST")
+        limit_post=zos_context.get("LIMIT_POSTS")
+        limit_friends=zos_context.get("LIMIT_FRIENDS")
+        max=zos_context.get("MAX_PARS")
+        # file_graphe="fb_graphe"
+        
+        self.context=Context(account,creds,limit_post,limit_friends,max,post,False,True)
+
+        
+
+        # this was painful to adapt..
+        #self.super().__init__("Facebook",context,Schema,publisher,roadmap)
         self.Schema=Schema
         try:
-
-            cookies=list(context.get("Fb_cookies")   )
+            cookies=list(zos_context.get("FB_COOKIE"))
+            self.create_Graphe_friends()
         except Exception as ex:
             print(ex)
 
     
     def save_json(self,filename,graph):
-        g = graph
-        g_json = json_graph.node_link_data(g)
-        json.dump(g_json,open(filename,'w'),indent=2)
+       try:
+            g = graph
+            g_json = json_graph.node_link_data(g)
+            json.dump(g_json,open(filename,'w'),indent=2)
+       except Exception as ex:
+           print(ex)
 
     def get_graph(self):
         return self.graphe
-    
+
     def set_graph(self,g):
         self.graphe=g
 
-        
-    @NetworkExtractor.data_publisher
-    def create_Graphe_friends(self,context,Schema,cookies):
-       
-
+    
+   # @NetworkExtractor.data_publisher
+    def create_Graphe_friends(self):
+        Schema=self.Schema
+        context=self.context
+        cookies=self.cookies
         count_parsed=0
         email= context.keys["email"]
         password=context.keys["password"]
         
         account=context.account
-        print(password)
+       
 
         Graphe=nx.DiGraph()
     
@@ -70,17 +91,17 @@ class Extractor(NetworkExtractor):
         try:
             profile=get_profile(account)
         except Exception as ex:
-             profile=get_profile(account,cookies=cookies)
+            print(str(ex))
+           # profile=get_profile(account,cookies=cookies)
 
-               
+        
 
-        key=(key+1)%len(cookies)
-         
+       # key=(key+1)%len(cookies)
+        #profile=get_profile("100009975842374",cookies="ali.txt")
         for attr in Schema['user']:
-            if attr in profile.keys():
-             
+            if attr in profile.keys():             
               nx.set_node_attributes(Graphe, name=attr, values=str(profile[attr]))
-           
+
         if context.user:
 
             print("user scraping")
@@ -95,7 +116,7 @@ class Extractor(NetworkExtractor):
                    v = Nodeslist[i]
                    i += 1
                    
-                   if  Graphe.nodes[v]['checked']==0 :
+                   if  Graphe.nodes[v]['checked']==0:
                          
                         Graphe.nodes[v]['checked']=1
                                 
@@ -103,6 +124,7 @@ class Extractor(NetworkExtractor):
                                   
                         limit_friend=context.limit_friends
                         list_friends=get_friends_user(email,password,v,limit_friend) 
+                        print(len(list_friends))
                         
                         #Add friends
                         try:
@@ -125,12 +147,12 @@ class Extractor(NetworkExtractor):
 
                    count_parsed=count_parsed+1
                    
-                   if count_parsed==context.max_pars:
+                   if count_parsed>=int(context.max_pars):
                         print("Extraction complete...........*")
                         
                         self.set_graph(Graphe)
                         final_graph=self.get_graph()
-                        #self.save_json(file_graphe+".json",final_graph)
+                        self.save_json("file_graphe.json",final_graph)
                         json=json_graph.node_link_data(self.graphe)
                          
                        # print(json)
@@ -141,15 +163,21 @@ class Extractor(NetworkExtractor):
                       # delivering payload
                       # locator.getPublisher().publish("Twitter",json.dumps(payload))
                     
-                
+                   print("sleep")
                    time.sleep(3)
-                self.set_graph(Graphe)
-                final_graph=self.get_graph()
-                json=json_graph.node_link_data(self.graphe)
+                  
+                   Nodeslist= [v for v in Graphe.nodes()]
+
+
+               
+                
+                
+            
+                 # json=json_graph.node_link_data(self.graph)
                          
-                       # print(json)
-                payload = json
-                payload["road_map"] = []
+                # print(json)
+                # payload = json
+                # payload["road_map"] = []
                 
                                      
 
@@ -157,7 +185,7 @@ class Extractor(NetworkExtractor):
                 print("ops")
                 print(ex)     
 
-
+   # @NetworkExtractor.data_publisher
     def create_Graphe_group(self,context,Schema,cookies):
         count_parsed=0
         email=context. keys['email']
